@@ -4,6 +4,7 @@ import {
 	deleteBook,
 	getBookById,
 	getBooks,
+	searchBooks,
 	updateBook,
 } from '../controllers/bookController.js';
 import { protectRoute } from '../middlewares/authMiddleware.js';
@@ -12,6 +13,7 @@ import { validateBook, validateObjectId } from '../middlewares/validation.js';
 const router = express.Router();
 
 //public routes, no auth required
+router.get('/search', searchBooks);
 router.get('/', getBooks);
 router.get('/:id', validateObjectId('id'), getBookById);
 

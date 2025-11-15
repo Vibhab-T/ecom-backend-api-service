@@ -187,3 +187,73 @@ export const deleteBook = async (req, res) => {
 		});
 	}
 };
+
+/**
+ * search books by author, title, category
+ * @route GET /api/books/search
+ * @access Public
+ * @queryParam {string} query - search string, required
+ * @queryParam {string} category - optional
+ * @queryParam {number} page - optional pagination page, def to 1
+ * @queryParam {number} limit - optional items per page, def to 10
+ */
+export const searchBooks = async (req, res) => {
+	try {
+		const { query, category, page = 1, limit = 10 } = req.query;
+
+		//query params vlaidation
+		if (!query || !query.trim()) {
+			const errRespons = getErrorResponse('SEARCH_INVALID_QUERY');
+			return res.status(errRespons.status).json({
+				success: false,
+				message: errRespons.message,
+				code: errRespons.code,
+			});
+		}
+
+		//build mongoDB filter for text search
+		const filter = { $text: { $search: query.trim() } };
+
+		//add category filter if provided
+		if (category) filter.category = category;
+
+		//count total matching docs
+		const total = await Book.countDocuments(filter);
+
+		//return false if no books found
+		if (total === 0) {
+			const error = getErrorResponse('SEARCH_NO_RESULTS');
+			return res.status(error.status).json({
+				success: false,
+				message: error.message,
+				code: error.code,
+			});
+		}
+
+		//fetch paginated results
+		const books = await Book.find(filter)
+			.skip((page - 1) * limit)
+			.limit(parseInt(limit));
+
+		//return search resulsts with pagination metadata
+		res.status(200).json({
+			success: true,
+			message: SUCCESS_MESSAGES.SEARCH_SUCCESS,
+			data: books,
+			pagination: {
+				currentPage: parseInt(page),
+				totalPages: Math.ceil(total / limit),
+				totalItems: total,
+				itemsPerPage: parseInt(limit),
+			},
+		});
+	} catch (error) {
+		console.error('Search Controller Error:', err.message);
+		const errorRes = getErrorResponse('INTERNAL_SERVER_ERROR');
+		res.status(errorRes.status).json({
+			success: false,
+			error: errorRes.message,
+			code: errorRes.code,
+		});
+	}
+};

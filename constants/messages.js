@@ -19,6 +19,9 @@ export const SUCCESS_MESSAGES = {
 	ORDER_CREATED: 'Order placed successfully',
 	ORDER_CANCELLED: 'Order cancelled successfully',
 	ORDER_STATUS_UPDATED: 'Order status updated',
+
+	//Search
+	SEARCH_SUCCESS: 'Search completed successfully',
 };
 /*
 export const EMAIL_TEMPLATES = {

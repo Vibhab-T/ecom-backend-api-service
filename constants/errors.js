@@ -68,6 +68,30 @@ export const ERROR_CODES = {
 		message: 'Internal server error',
 		status: 500,
 	},
+
+	//Search errors
+	SEARCH_INVALID_QUERY: {
+		code: 'SEARCH_001',
+		message: 'Search query is required',
+		status: 400,
+	},
+	SEARCH_NO_RESULTS: {
+		code: 'SEARCH_002',
+		message: 'No results found',
+		status: 404,
+	},
+
+	//Order errors
+	ORDER_NOT_FOUND: {
+		code: 'ORDER_001',
+		message: 'Order not found',
+		status: 404,
+	},
+	ORDER_STOCK_ERROR: {
+		code: 'ORDER_002',
+		message: 'Not enough stock for item',
+		status: 400,
+	},
 };
 
 export const getErrorResponse = (errorKey) => {

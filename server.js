@@ -6,7 +6,6 @@ import connectToMongoDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';
 import { errorHandler } from './middlewares/errorHandlers.js';
 import { requestLogger } from './middlewares/logger.js';
 
@@ -36,7 +35,6 @@ app.use(requestLogger);
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes);
 
 //health check
 app.get('/health', (req, res) => {

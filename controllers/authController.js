@@ -1,7 +1,9 @@
 import User from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../utils/genTokenAndSetCookie.js';
+import genTokenAndSetCookie, {
+	generateToken,
+} from '../utils/genTokenAndSetCookie.js';
 import { getErrorResponse } from '../constants/errors.js';
 import { SUCCESS_MESSAGES } from '../constants/messages.js';
 
@@ -39,8 +41,8 @@ export const registerUser = async (req, res) => {
 		if (newUser) {
 			await newUser.save();
 
-			//generate token
-			const token = generateToken(newUser._id);
+			//generate token and set cookie, sorry for the opposite function name, boo
+			genTokenAndSetCookie(newUser._id, res);
 
 			//return success with user and token
 			return res.status(201).json({
@@ -51,7 +53,6 @@ export const registerUser = async (req, res) => {
 					name: newUser.name,
 					email: newUser.email,
 				},
-				token,
 			});
 		}
 	} catch (error) {
@@ -100,7 +101,7 @@ export const loginUser = async (req, res) => {
 		}
 
 		//generate jwt token
-		const token = generateToken(user._id);
+		genTokenAndSetCookie(user._id, res);
 
 		//update last login
 		user.lastLogin = new Date();
@@ -115,7 +116,6 @@ export const loginUser = async (req, res) => {
 				name: user.name,
 				email: user.email,
 			},
-			token,
 		});
 	} catch (error) {
 		console.error('Login error:', error.message);

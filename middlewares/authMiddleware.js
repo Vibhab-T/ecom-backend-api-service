@@ -3,28 +3,25 @@ import User from '../models/user.js';
 import { ERROR_CODES } from '../constants/errors.js';
 
 /**
- * protect routes, verify jwt token
- * extract the user from the token, which is extracted from the request.
+ * protect routes, verify jwt token from the cookie
+ * extract the user from the token, which is extracted from the cookie.
  * attach user to the request then
- 
  */
 
 export const protectRoute = async (req, res, next) => {
 	try {
-		//get token from authorization header (bearer token)
-		const authHeader = req.headers.authorization;
+		//get token from cookie
+		const token = req.cookies.jwt;
 
-		//check for existence of auth header and token starts with "Bearer <token>"
-		if (!authHeader || !authHeader.startsWith('Bearer ')) {
-			const error = ERROR_CODES.AUTH_NO_TOKEN;
-			return res.status(error.status).json({
-				error: error.message,
-				code: error.code,
+		//check token existence
+		if (!token) {
+			const errResp = ERROR_CODES.AUTH_NO_TOKEN;
+			return res.status(errResp.status).json({
+				success: false,
+				error: errResp.message,
+				code: errResp.code,
 			});
 		}
-
-		//extract token from "Bearer <token>"
-		const token = authHeader.substring(7);
 
 		//verify token
 		let decoded;

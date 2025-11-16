@@ -206,7 +206,7 @@ export const searchBooks = async (req, res) => {
 			const errRespons = getErrorResponse('SEARCH_INVALID_QUERY');
 			return res.status(errRespons.status).json({
 				success: false,
-				message: errRespons.message,
+				error: errRespons.message,
 				code: errRespons.code,
 			});
 		}
@@ -225,7 +225,7 @@ export const searchBooks = async (req, res) => {
 			const error = getErrorResponse('SEARCH_NO_RESULTS');
 			return res.status(error.status).json({
 				success: false,
-				message: error.message,
+				error: error.message,
 				code: error.code,
 			});
 		}

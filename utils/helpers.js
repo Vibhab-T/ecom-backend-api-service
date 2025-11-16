@@ -1,3 +1,15 @@
+import crypto from 'crypto';
+
+/**
+ * helper function to generate HMAC SHA256 signature
+ * used for both request and response verification
+ */
+export const generateSignature = (message, secretKey) => {
+	const hmac = crypto.createHmac('sha256', secretKey);
+	hmac.update(message);
+	return hmac.digest('base64');
+};
+
 /**
  * pagination metadata
  * @param {number} page = current page

@@ -1,0 +1,52 @@
+<%- include('../partials/header', { title: 'Payment Successful' }) %>
+
+<div
+	class="container"
+	style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+	<div class="card">
+		<div class="icon" style="color: #27ae60">✅</div>
+		<h1>Payment Successful!</h1>
+		<p>Your order has been confirmed and payment received successfully.</p>
+
+		<div class="details-box">
+			<div class="detail-row">
+				<span class="label">Order ID:</span>
+				<span class="value"><%= order._id %></span>
+			</div>
+			<div class="detail-row">
+				<span class="label">Payment Reference:</span>
+				<span class="value"><%= transactionCode %></span>
+			</div>
+			<div class="detail-row">
+				<span class="label">Amount Paid:</span>
+				<span class="value">Rs. <%= totalAmount.toFixed(2) %></span>
+			</div>
+			<div class="detail-row">
+				<span class="label">Payment Status:</span>
+				<span class="value" style="color: #27ae60; font-weight: bold"
+					>PAID</span
+				>
+			</div>
+			<div class="detail-row">
+				<span class="label">Transaction Date:</span>
+				<span class="value"><%= new Date().toLocaleString() %></span>
+			</div>
+		</div>
+
+		<p style="color: #27ae60; font-weight: 600; margin: 20px 0">
+			✓ Stock has been updated<br />
+			✓ Your cart has been cleared<br />
+			✓ Order is being processed
+		</p>
+
+		<a href="/api/orders/<%= order._id %>" class="btn btn-primary"
+			>View Order Details</a
+		>
+
+		<p style="margin-top: 20px; font-size: 14px; color: #999">
+			Thank you for your purchase! 🎉
+		</p>
+	</div>
+</div>
+
+<%- include('../partials/footer') %>

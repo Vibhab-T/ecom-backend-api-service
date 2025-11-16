@@ -1,0 +1,49 @@
+<%- include('../partials/header', { title: 'Error' }) %>
+
+<div class="container" style="background: #f5f5f5">
+	<div class="card">
+		<div class="icon" style="color: #e67e22">⚠️</div>
+		<h1><%= title || 'An Error Occurred' %></h1>
+		<p>
+			<%= message || 'Something went wrong while processing your request.' %>
+		</p>
+
+		<% if (details) { %>
+		<div class="details-box">
+			<div class="detail-row">
+				<span class="label">Error Code:</span>
+				<span class="value"><%= details.code || 'UNKNOWN' %></span>
+			</div>
+			<% if (details.orderId) { %>
+			<div class="detail-row">
+				<span class="label">Order ID:</span>
+				<span class="value"><%= details.orderId %></span>
+			</div>
+			<% } %>
+		</div>
+		<% } %>
+
+		<div class="info-list">
+			<p style="font-weight: 600; margin-bottom: 15px">What you can do:</p>
+			<ul>
+				<li>Check your internet connection</li>
+				<li>Try refreshing the page</li>
+				<li>Verify your order status</li>
+				<li>Contact support if the issue persists</li>
+			</ul>
+		</div>
+
+		<div
+			style="
+				display: flex;
+				gap: 15px;
+				justify-content: center;
+				flex-wrap: wrap;
+				margin-top: 25px;
+			">
+			<a href="/api/orders" class="btn btn-primary">My Orders</a>
+		</div>
+	</div>
+</div>
+
+<%- include('../partials/footer') %>

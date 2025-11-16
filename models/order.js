@@ -1,10 +1,10 @@
-import mongoose, { trusted } from 'mongoose';
+import mongoose from 'mongoose';
 
 const orderItemSchema = new mongoose.Schema({
-	bookdId: {
-		type: mongoode.schema.Types.ObjectId,
+	bookId: {
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Book',
-		required: true,
+		required: true, //book must exist
 	},
 	quantity: {
 		type: Number,
@@ -18,12 +18,12 @@ const orderItemSchema = new mongoose.Schema({
 	},
 });
 
-const orderSchema = new mongoose.schema(
+const orderSchema = new mongoose.Schema(
 	{
 		userId: {
-			type: mongoose.schema.Types.ObjectId,
+			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
+			required: true, //order must belong to a suer
 		},
 		items: [orderItemSchema],
 		totalAmount: {
@@ -36,12 +36,14 @@ const orderSchema = new mongoose.schema(
 			enum: ['pending', 'paid', 'failed', 'cancelled'],
 			default: 'pending',
 		},
+		paymentRefId: { type: String }, //for esewa ref number
 	},
 	{ timestamps: true }
 );
 
 //index faster searching,
 orderSchema.index({ userId: 1 });
+orderSchema.index({ status: 1 });
 
 const Order = mongoose.model('Order', orderSchema);
 

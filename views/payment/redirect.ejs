@@ -1,0 +1,79 @@
+<%- include('../partials/header', { title: 'Redirecting to eSewa' }) %>
+
+<div
+	class="container"
+	style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+	<div class="card">
+		<div class="spinner"></div>
+		<h1>Redirecting to eSewa Payment Gateway...</h1>
+		<p>Please wait while we securely redirect you to complete your payment.</p>
+
+		<div class="details-box">
+			<div class="detail-row">
+				<span class="label">Order ID:</span>
+				<span class="value"><%= order._id %></span>
+			</div>
+			<div class="detail-row">
+				<span class="label">Amount:</span>
+				<span class="value">Rs. <%= order.totalAmount.toFixed(2) %></span>
+			</div>
+			<div class="detail-row">
+				<span class="label">Status:</span>
+				<span class="value"><%= order.status.toUpperCase() %></span>
+			</div>
+		</div>
+
+		<p style="font-size: 14px; color: #999">
+			You will be redirected in <span id="countdown">3</span> seconds...
+		</p>
+	</div>
+</div>
+
+<!-- Hidden form that auto-submits to eSewa -->
+<form
+	id="esewaForm"
+	action="<%= paymentUrl %>"
+	method="POST"
+	style="display: none">
+	<input type="hidden" name="amount" value="<%= params.amount %>" />
+	<input type="hidden" name="tax_amount" value="<%= params.tax_amount %>" />
+	<input type="hidden" name="total_amount" value="<%= params.total_amount %>" />
+	<input
+		type="hidden"
+		name="transaction_uuid"
+		value="<%= params.transaction_uuid %>" />
+	<input type="hidden" name="product_code" value="<%= params.product_code %>" />
+	<input
+		type="hidden"
+		name="product_service_charge"
+		value="<%= params.product_service_charge %>" />
+	<input
+		type="hidden"
+		name="product_delivery_charge"
+		value="<%= params.product_delivery_charge %>" />
+	<input type="hidden" name="success_url" value="<%= params.success_url %>" />
+	<input type="hidden" name="failure_url" value="<%= params.failure_url %>" />
+	<input
+		type="hidden"
+		name="signed_field_names"
+		value="<%= params.signed_field_names %>" />
+	<input type="hidden" name="signature" value="<%= params.signature %>" />
+</form>
+
+<script>
+	// Countdown timer
+	let seconds = 3;
+	const countdownElement = document.getElementById('countdown');
+
+	const countdown = setInterval(() => {
+		seconds--;
+		countdownElement.textContent = seconds;
+
+		if (seconds <= 0) {
+			clearInterval(countdown);
+			document.getElementById('esewaForm').submit();
+		}
+	}, 1000);
+</script>
+
+<%- include('../partials/footer') %>

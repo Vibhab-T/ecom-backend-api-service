@@ -49,6 +49,11 @@ export const addToCart = async (req, res) => {
 		//validate quiantity
 		if (quantity < 1) {
 			const error = getErrorResponse('CART_INVALID_QUANTITY');
+			return res.status(error.status).json({
+				success: false,
+				error: error.message,
+				code: error.code,
+			});
 		}
 
 		//book exists?
